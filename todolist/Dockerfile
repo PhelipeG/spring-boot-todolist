@@ -1,0 +1,14 @@
+FROM UBUNTU:lastest AS build
+
+RUN APT-GET UPDATE && APT-GET INSTALL OPENJDK-17-JDK -Y
+
+COPY . .
+
+RUN APT-GET INSTALL MAVEN -Y
+RUN MVN CLEAN INSTALL
+
+EXPOSE 8080
+
+COPY --from=build /target/*.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
