@@ -1,14 +1,16 @@
-FROM UBUNTU:lastest AS build
+FROM ubuntu:lastest AS build
 
-RUN APT-GET UPDATE && APT-GET INSTALL OPENJDK-17-JDK -Y
+RUN apt-get update
+RUN apt-get install openjdk-17-jdk -Y
 
 COPY . .
 
-RUN APT-GET INSTALL MAVEN -Y
-RUN MVN CLEAN INSTALL
+RUN apt-get install maven -y
+RUN mvn clean install
 
 EXPOSE 8080
 
 COPY --from=build /target/*.jar app.jar
+
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
